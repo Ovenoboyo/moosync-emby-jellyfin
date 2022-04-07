@@ -131,6 +131,8 @@ export class MyExtension implements MoosyncExtensionTemplate {
         )
       ) {
         this.serverType = "jellyfin"
+      } else {
+        this.serverType = "emby"
       }
 
       this.accessToken = resp.data.AccessToken
