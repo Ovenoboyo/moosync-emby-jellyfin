@@ -1,11 +1,12 @@
 {
-  "name": "moosync.extension.starter",
+  "name": "moosync.emby.jellyfin",
   "version": "1.0.0",
-  "description": "",
+  "description": "Fetch music from Emby or Jellyfin server",
   "main": "src/index.ts",
+  "icon": "public/emby_icon.svg",
   "extensionEntry": "dist/index.js",
   "moosyncExtension": true,
-  "displayName": "MyExtension",
+  "displayName": "Emby / Jellyfin Integration",
   "scripts": {
     "watch:build": "webpack --watch",
     "webpack:build": "webpack --config webpack.config.js",
@@ -13,11 +14,18 @@
   },
   "author": "Sahil Gupte",
   "devDependencies": {
-    "@moosync/moosync-types": "^1.2.4",
+    "@moosync/moosync-types": "https://github.com/Moosync/extension-api-types",
     "@moosync/packer": "^0.1.2",
+    "@types/semver": "^7.3.9",
+    "axios": "^0.26.1",
+    "debug": "^4.3.4",
+    "semver": "^7.3.5",
     "ts-loader": "^9.2.7",
     "typescript": "^4.6.2",
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "@types/node": "^17.0.23"
   }
 }
