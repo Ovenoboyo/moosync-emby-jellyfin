@@ -135,6 +135,8 @@ export class MyExtension implements MoosyncExtensionTemplate {
         this.serverType = "emby"
       }
 
+      console.debug(resp.data.AccessToken, resp.data.User.Id)
+
       this.accessToken = resp.data.AccessToken
       this.userID = resp.data.User.Id
     } catch (e) {
@@ -144,8 +146,12 @@ export class MyExtension implements MoosyncExtensionTemplate {
 
   private async getEmbyLibraries() {
     const libraries = await this.getLibraries()
+    const playlists = await this.getPlaylists()
+
+    const allItems = [...libraries, ...playlists]
+
     const scanned: Playlist[] = []
-    for (const l of libraries) {
+    for (const l of allItems) {
       scanned.push({
         playlist_id: l.Id,
         playlist_name: l.Name,
@@ -221,6 +227,17 @@ export class MyExtension implements MoosyncExtensionTemplate {
       }
     }
     return musicLibraries
+  }
+
+  private async getPlaylists() {
+    const resp = await this.makeUserRequest<Collections>(
+      this.userID,
+      undefined,
+      undefined,
+      "?Recursive=true&IncludeItemTypes=playlist"
+    )
+
+    return resp.Items ?? []
   }
 
   async onPreferenceChanged({
