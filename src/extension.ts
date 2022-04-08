@@ -135,8 +135,6 @@ export class MyExtension implements MoosyncExtensionTemplate {
         this.serverType = "emby"
       }
 
-      console.debug(resp.data.AccessToken, resp.data.User.Id)
-
       this.accessToken = resp.data.AccessToken
       this.userID = resp.data.User.Id
     } catch (e) {
@@ -257,7 +255,6 @@ export class MyExtension implements MoosyncExtensionTemplate {
 
     if (key === "emby_password") {
       this.password = value
-      console.log(value)
     }
 
     if (semver.satisfies(process.env.MOOSYNC_VERSION, ">=1.3.0")) {
