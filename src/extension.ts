@@ -33,8 +33,6 @@ export class MyExtension implements MoosyncExtensionTemplate {
     this.username = await api.getPreferences<string>("emby_username", "")
     this.password = await api.getSecure<string>("emby_password", "")
 
-    console.log(this.baseURL, this.username, this.password)
-
     this.registerPlaylistListeners()
 
     if (semver.satisfies(process.env.MOOSYNC_VERSION, ">=1.3.0")) {
