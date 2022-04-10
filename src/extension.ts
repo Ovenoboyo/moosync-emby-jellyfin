@@ -110,6 +110,10 @@ export class MyExtension implements MoosyncExtensionTemplate {
       }"`,
     }
 
+    if (this.baseURL.endsWith("/")) {
+      this.baseURL = this.baseURL.slice(0, -1)
+    }
+
     if (this.accessToken) {
       try {
         await this.axios.post(`${this.baseURL}/Sessions/Logout`)
@@ -241,7 +245,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
     return resp.Items ?? []
   }
 
-  async onPreferenceChanged({
+  private async onPreferenceChanged({
     key,
     value,
   }: {
@@ -249,7 +253,11 @@ export class MyExtension implements MoosyncExtensionTemplate {
     value: any
   }): Promise<void> {
     if (key === "emby_url") {
-      this.baseURL = value
+      if (value.endsWith("/")) {
+        this.baseURL = value.slice(0, -1)
+      } else {
+        this.baseURL = value
+      }
     }
 
     if (key === "emby_username") {
@@ -280,6 +288,8 @@ export class MyExtension implements MoosyncExtensionTemplate {
           songs,
         }
       })
+
+      api.on("preferenceChanged", this.onPreferenceChanged.bind(this))
     }
   }
 }
