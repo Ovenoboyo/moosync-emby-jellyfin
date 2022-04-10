@@ -1,6 +1,6 @@
 {
   "name": "moosync.emby.jellyfin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Fetch music from Emby or Jellyfin server",
   "main": "src/index.ts",
   "icon": "public/emby_icon.svg",
