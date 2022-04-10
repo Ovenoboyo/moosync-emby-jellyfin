@@ -262,14 +262,14 @@ export class MyExtension implements MoosyncExtensionTemplate {
 
   private registerPlaylistListeners() {
     if (semver.satisfies(process.env.MOOSYNC_VERSION, ">=1.3.0")) {
-      api.on("get-playlists", async () => {
+      api.on("requestedPlaylists", async () => {
         await this.getEmbyLibraries()
         return {
           playlists: this.scannedLibraries,
         }
       })
 
-      api.on("get-playlist-songs", async (playlist_id) => {
+      api.on("requestedPlaylistSongs", async (playlist_id) => {
         const songs = await this.getLibraryContent(playlist_id)
         return {
           songs,
