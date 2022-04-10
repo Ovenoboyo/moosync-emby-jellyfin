@@ -69,7 +69,7 @@ export class MyExtension implements MoosyncExtensionTemplate {
     }
 
     if (userID && this.accessToken) {
-      url += `/Users/${userID}/`
+      url += `/Users/${userID}`
     }
 
     url += `/Items/${itemID ?? ""}/${customPath ?? ""}`.replace(
