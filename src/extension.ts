@@ -63,11 +63,16 @@ export class MyExtension implements MoosyncExtensionTemplate {
     params?: string
   ): Promise<T | undefined> {
     let url = this.baseURL
+
+    if (url.endsWith("/")) {
+      url = url.slice(0, -1)
+    }
+
     if (userID && this.accessToken) {
       url += `/Users/${userID}/`
     }
 
-    url += `Items/${itemID ?? ""}/${customPath ?? ""}`.replace(
+    url += `/Items/${itemID ?? ""}/${customPath ?? ""}`.replace(
       /([^:]\/)\/+/g,
       "$1"
     )
