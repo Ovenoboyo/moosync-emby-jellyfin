@@ -187,7 +187,12 @@ export class MyExtension implements MoosyncExtensionTemplate {
         songs.push({
           _id: r.Id,
           title: r.Name,
-          artists: r.Artists,
+          artists: r.Artists.map((val) => {
+            return {
+              artist_id: `emby-artist:${val}`,
+              artist_name: val,
+            }
+          }),
           song_coverPath_high: this.getCoverImage(r.Id),
           album: {
             album_name: r.Album,
