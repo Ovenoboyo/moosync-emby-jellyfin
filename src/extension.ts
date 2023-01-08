@@ -187,12 +187,10 @@ export class MyExtension implements MoosyncExtensionTemplate {
         songs.push({
           _id: r.Id,
           title: r.Name,
-          artists: r.Artists.map((val) => {
-            return {
-              artist_id: `emby-artist:${val}`,
-              artist_name: val,
-            }
-          }),
+          artists: r.Artists.map((val) => ({
+            artist_id: `emby-artist:${val}`,
+            artist_name: val,
+          })),
           song_coverPath_high: this.getCoverImage(r.Id),
           album: {
             album_name: r.Album,
@@ -250,6 +248,42 @@ export class MyExtension implements MoosyncExtensionTemplate {
     return resp.Items ?? []
   }
 
+  private async getSong(id: string) {
+    const resp = await this.makeUserRequest<CollectionContent["Items"][0]>(
+      this.userID,
+      id
+    )
+
+    const song: Song = {
+      _id: resp.Id,
+      title: resp.Name,
+      artists: resp.Artists.map((val) => ({
+        artist_id: `emby-artist:${val}`,
+        artist_name: val,
+      })),
+      song_coverPath_high: this.getCoverImage(resp.Id),
+      album: {
+        album_name: resp.Album,
+        album_artist: resp.AlbumArtist,
+        album_coverPath_high:
+          resp.AlbumPrimaryImageTag &&
+          this.getCoverImage(resp.AlbumPrimaryImageTag),
+      },
+      duration: resp.RunTimeTicks / 10000000,
+      playbackUrl: this.getPlaybackURL(resp.Id),
+      type: "URL",
+      date_added: Date.now(),
+      icon: resolve(
+        __dirname,
+        `../public/${
+          this.serverType === "emby" ? "emby_icon" : "jellyfin_icon"
+        }.svg`
+      ),
+    }
+
+    return song
+  }
+
   private async onPreferenceChanged({
     key,
     value,
@@ -295,6 +329,12 @@ export class MyExtension implements MoosyncExtensionTemplate {
       })
 
       api.on("preferenceChanged", this.onPreferenceChanged.bind(this))
+
+      api.on("requestedSongFromId", async (id) => {
+        return {
+          song: await this.getSong(id),
+        }
+      })
     }
   }
 }
